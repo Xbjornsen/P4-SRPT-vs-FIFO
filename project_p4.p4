@@ -18,7 +18,7 @@ header ipv4_t {
     bit<4>      ihl;
     bit<8>      diffserv;
     bit<16>     totalLen;
-    bit<16>     idenification;
+    bit<16>     identification;
     bit<3>      flags;
     bit<13>     fragOffset;
     bit<8>      ttl;
@@ -51,6 +51,12 @@ struct headers {
 
 }
 
+/* ERROR */
+error {
+    Ipv4IncorrectVersion,
+    IPv4OptionsNotSupported
+}
+
 /* PARSER */
 parser MyParser(packet_in_packet,
         out headers hdr,
@@ -62,7 +68,7 @@ parser MyParser(packet_in_packet,
 // User-defined parser state
     state parse_ethernet {
         packet.extract(hdr.ethernet);
-        transition select(hdr.ethernet.type) {
+        transition select(hdr.ethernet.etherType) {
             TYPE_IPV4: parse_ipv4
             default: accept;
         }
@@ -80,9 +86,10 @@ control MyVerifyChecksum(in headers hdr,
 /* INGRESS PROCESSING */
 control MyIngress(inout headers hdr,
                 inout metadata meta,
-                inout standard_metadata_t) {
+                inout standard_metadata_t standard_metadata ) {
     action drop(){
-        mark_to_drop();
+        mark_to_drop(standard_metadata);
+        dropped = true;
     }
     action  ipv4_forward(macAddr_t, dstAddr, egressSpec_t, port){
         standard_metadata.egress_spec = port;
@@ -115,13 +122,10 @@ control MyIngress(inout headers hdr,
         }
 }
 
-
-
 /* EGRESS PROCESSING */
 control MyEgress(inout headers hdr,
                 inout metadata meta,
-                inout standard_metadata_t standard_metadata_t,
-    ){
+                inout standard_metadata_t standard_metadata){
     apply{
 
     }
