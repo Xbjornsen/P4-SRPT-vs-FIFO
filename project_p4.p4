@@ -1,16 +1,22 @@
 #include <core.p4>
 #include <v1model.p4>
 
+/* bit ocnfused about declaring a const here */
 const bit<16> TYPE_IPV4 = 0x800;
 
 typedef bit<9> egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 
+/* do we put this VLAN declaration here */
+enum bit<16> EtherType {
+    VLAN    =0x8100,
+    IPV4    =0x0800
+}
 header ethernet_t {
-    macAddr_t dstAddr;
-    macAddr_t srcAddr;
-    bit<16>     etherType;
+    macAddr_t   dstAddr;
+    macAddr_t   srcAddr;
+    EtherType   etherType;
 }
 
 header ipv4_t {
@@ -69,7 +75,8 @@ parser MyParser(packet_in_packet,
     state parse_ethernet {
         packet.extract(hdr.ethernet);
         transition select(hdr.ethernet.etherType) {
-            TYPE_IPV4: parse_ipv4
+            EtherType.VLAN : parse_vlan;
+            EtherType.IPV4 : parse_ipv4;
             default: accept;
         }
     }
@@ -114,6 +121,24 @@ control MyIngress(inout headers hdr,
         size = 1024;
         default_action = NoAction();
         }
+// this is a table that we created and it what we believe we need to separate
+// the different types of service. 
+    table diffserv_match {
+        key = {
+            hdr.ipv4.diffserv : exact; //exact service match
+        }
+        // actions to be invoked
+        actions = {
+            diffserv_1_forward;
+            diffserv_2_forward;
+            diffserv_3_forward;
+            drop;
+            NoAction;
+        }
+        // table properties
+        size = 1024
+        default_action = NoAction();
+    }
         apply{
             //apply the table
             if (hdr.ipv4.isValid() ) {
