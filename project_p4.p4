@@ -19,10 +19,12 @@ header ethernet_t {
     EtherType   etherType;
 }
 
+
 header ipv4_t {
     bit<4>      version;
     bit<4>      ihl;
-    bit<8>      diffserv;
+    bit<6>      diffserv;
+    bit<2>      ecn;
     bit<16>     totalLen;
     bit<16>     identification;
     bit<3>      flags;
@@ -76,6 +78,16 @@ parser MyParser(packet_in packet,
         packet.extract(hdr.ethernet);
         verify()
         transition select(hdr.ethernet.etherType) {
+            EtherType.VLAN : parse_vlan;
+            EtherType.IPV4 : parse_ipv4;
+            default: accept;
+        }
+    }
+    // User-defined parser state for vlan
+    state parse_ethernet {
+        packet.extract(hdr.vlan.etherType);
+        verify()
+        transition select(hdr.ethernet.EtherType) {
             EtherType.VLAN : parse_vlan;
             EtherType.IPV4 : parse_ipv4;
             default: accept;
@@ -179,6 +191,7 @@ control MyComputeChecksum(inout headers hdr,inout metadata meta) {
             { hdr.ipv4.version,
 	        hdr.ipv4.ihl,
             hdr.ipv4.diffserv,
+            hdr.ipv4.ecn,
             hdr.ipv4.totalLen,
             hdr.ipv4.identification,
             hdr.ipv4.flags,
