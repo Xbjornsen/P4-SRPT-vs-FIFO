@@ -64,7 +64,7 @@ error {
 }
 
 /* PARSER */
-parser MyParser(packet_in_packet,
+parser MyParser(packet_in packet,
         out headers hdr,
         inout metadata meta,
         inout standard_metadata_t) {
@@ -74,6 +74,7 @@ parser MyParser(packet_in_packet,
 // User-defined parser state
     state parse_ethernet {
         packet.extract(hdr.ethernet);
+        verify()
         transition select(hdr.ethernet.etherType) {
             EtherType.VLAN : parse_vlan;
             EtherType.IPV4 : parse_ipv4;
@@ -104,6 +105,18 @@ control MyIngress(inout headers hdr,
         hdr.ethernet.dstAddr = dstAddr;
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
+    action diffserv_1_forward(){
+
+    }
+
+    action diffserv_2_forward(){
+
+    }
+
+    action diffserv_3_forward(){
+
+    }
+
 
     table ipv4_lpm { 
         key = { 
