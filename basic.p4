@@ -3,6 +3,7 @@
 #include <v1model.p4>
 
 const bit<16> TYPE_IPV4 = 0x800;
+const bit<16> TYPE_VLAN = 0x8100;
 
 /*************************************************************************
 *********************** H E A D E R S  ***********************************
@@ -12,19 +13,14 @@ typedef bit<9>  egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 
-enum bit<16> etherType {
-    VLAN    =0x8100,
-    IPV4    =0x0800,
-
-}
 
 header ethernet_t {
     macAddr_t dstAddr;
-    macAddr_t srcAddr;
+    macAddr_t srcAddr;s
     bit<16>   etherType;
 }
 
-header vlan{
+header vlan_t {
 	bit<3>   prio;
   bit<1>   cfi;
 	bit<12>  id;
@@ -52,6 +48,7 @@ struct metadata {
 
 struct headers {
     ethernet_t   ethernet;
+    vlan_t       vlan;
     ipv4_t       ipv4;
 }
 
@@ -71,17 +68,16 @@ parser MyParser(packet_in packet,
     state parse_ethernet {
         packet.extract(hdr.ethernet);
         transition select(hdr.ethernet.etherType) {
-            IPV4: parse_ipv4;
-	   VLAN: parse_vlan;
+            TYPE_IPV4: parse_ipv4;
+	          TYPE_VLAN: parse_vlan;
             default: accept;
         }
     }
     // User-defined parser state for vlan
     state parse_vlan {
-        packet.extract(hdr.vlan.etherType);
-        verify()
+        packet.extract(hdr.vlan);
         transition select(hdr.vlan.etherType) {
-            EtherType.VLAN : parse_vlan;
+            TYPE_IPV4: parse_ipv4;
             default: accept;
         }
     }
@@ -144,24 +140,21 @@ control MyIngress(inout headers hdr,
 ****************  E G R E S S   P R O C E S S I N G   *******************
 *************************************************************************/
 
-control MyEgress(inout headers vlan, hdr,
+control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
-    apply {  }
+
+    apply {
+    hdr.vlan.id=hdr.vlan.id+hdr.ipv4.diffserv;  }
 }
 
 /*************************************************************************
 *************   C H E C K S U M    C O M P U T A T I O N   **************
 *************************************************************************/
 
-control MyComputeChecksum(inout headers  vlan, hdr, inout metadata meta) {
+control MyComputeChecksum(inout headers hdr, inout metadata meta) {
      apply {
 	update_checksum(
-      hdr.vlan.isValid(),
-          { hdr.vlan.prio,
-            hdr.vlan.cfi,
-            hdr.vlan.id,
-            hdr.vlan.etherType}
 	    hdr.ipv4.isValid(),
             { hdr.ipv4.version,
 	            hdr.ipv4.ihl,
@@ -187,6 +180,7 @@ control MyComputeChecksum(inout headers  vlan, hdr, inout metadata meta) {
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet);
+        packet.emit(hdr.vlan);
         packet.emit(hdr.ipv4);
     }
 }
