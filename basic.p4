@@ -9,14 +9,14 @@ const bit<16> TYPE_VLAN = 0x8100;
 *********************** H E A D E R S  ***********************************
 *************************************************************************/
 
-typedef bit<9>  egressSpec_t;
+typedef bit<16>  egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 
 
 header ethernet_t {
     macAddr_t dstAddr;
-    macAddr_t srcAddr;s
+    macAddr_t srcAddr;
     bit<16>   etherType;
 }
 
@@ -116,23 +116,107 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
-    table ipv4_lpm {
+    
+
+    action ToQueue0(){
+        // set port to x.0 
+    }
+    action ToQueue1(){
+    // set port to x.1
+
+    }
+    action ToQueue2(){
+    // set port to x.2
+
+    }
+    action ToQueue3(){
+    // set port to x.3
+    }
+    action ToQueue4(){
+    // set port to x.4
+
+    }
+    action ToQueue5(){
+    // set port to x.5
+
+    }
+    action ToQueue6(){
+    // set port to x.6
+
+    }
+    action ToQueue7(){
+    // set port to x.7
+
+    }
+
+    table TOS1_Audio{
         key = {
-            hdr.ipv4.dstAddr: lpm;
+            hdr.vlan.id: range;
         }
         actions = {
-            ipv4_forward;
-            drop;
+            ToQueue0;
+            ToQueue1;
+            ToQueue2;
+            ToQueue3;
+            ToQueue4;
+            ToQueue5;
             NoAction;
         }
         size = 1024;
         default_action = NoAction();
     }
 
-    apply {
-        if (hdr.ipv4.isValid()) {
-            ipv4_lpm.apply();
+    table TOS2_Video{
+        key = {
+            hdr.vlan.id: range;
         }
+        actions = {
+            ToQueue0;
+            ToQueue1;
+            ToQueue2;
+            ToQueue3;
+            ToQueue4;
+            ToQueue5;
+            ToQueue6;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction();
+    }
+
+    table TOS3_Best_Effort{
+        key = {
+            hdr.vlan.id: range;
+        }
+        actions = {
+            ToQueue0;
+            ToQueue1;
+            ToQueue2;
+            ToQueue3;
+            ToQueue4;
+            ToQueue5;
+            ToQueue6;
+            ToQueue7;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction();
+    }
+
+
+    apply {
+        if(hdr.ipv4.diffserv == 0x1)
+            TOS1_Audio.apply();
+        else if(hdr.ipv4.diffserv == 0x2)
+            TOS2_Video.apply();
+        else if(hdr.ipv4.diffserv == 0x3)
+            TOS3_Best_Effort.apply();
+
+        /*
+        if (hdr.ipv4.isValid()) {
+            ipv4_tos.apply();
+        }
+        */
     }
 }
 
@@ -144,8 +228,7 @@ control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
 
-    apply {
-    hdr.vlan.id=hdr.vlan.id+hdr.ipv4.diffserv;  }
+    apply { }
 }
 
 /*************************************************************************
