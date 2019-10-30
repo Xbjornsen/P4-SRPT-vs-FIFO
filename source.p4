@@ -9,7 +9,7 @@ const bit<16> TYPE_VLAN = 0x8100;
 *********************** H E A D E R S  ***********************************
 *************************************************************************/
 
-typedef bit<16>  egressSpec_t;
+typedef bit<16> egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 
@@ -120,6 +120,8 @@ control MyIngress(inout headers hdr,
 
     action ToQueue0(){
         // set port to x.0 
+       
+         
     }
     action ToQueue1(){
     // set port to x.1
@@ -127,6 +129,7 @@ control MyIngress(inout headers hdr,
     }
     action ToQueue2(){
     // set port to x.2
+        
 
     }
     action ToQueue3(){

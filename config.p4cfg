@@ -1,0 +1,378 @@
+{
+    "tables": {
+        "ingress::TOS3_Best_Effort": {
+            "rules": [
+                {
+                    "action": {
+                        "type": "ingress::ToQueue0"
+                    }, 
+                    "name": "MatchBestEffort0", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "0->500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue1"
+                    }, 
+                    "name": "MatchBestEffort1", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "501->1000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue2"
+                    }, 
+                    "name": "MatchBestEffort2", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "1001->1500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue3"
+                    }, 
+                    "name": "MatchBestEffort3", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "1501->2000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue4"
+                    }, 
+                    "name": "MatchBestEffort4", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "2001->2500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue5"
+                    }, 
+                    "name": "MatchBestEffort5", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "2501->3000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue6"
+                    }, 
+                    "name": "MatchBestEffort6", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "3001->3500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue7"
+                    }, 
+                    "name": "MatchBestEffort7", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "3501->4000"
+                        }
+                    }
+                }
+            ]
+        }, 
+        "ingress::TOS2_Video": {
+            "rules": [
+                {
+                    "action": {
+                        "type": "ingress::ToQueue0"
+                    }, 
+                    "name": "MatchVideo0", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "0->500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue0"
+                    }, 
+                    "name": "MatchVideo1", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "501->1000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue1"
+                    }, 
+                    "name": "MatchVideo2", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "1001->1500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue2"
+                    }, 
+                    "name": "MatchVideo3", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "1501->2000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue3"
+                    }, 
+                    "name": "MatchVideo4", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "2001->2500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue4"
+                    }, 
+                    "name": "MatchVideo5", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "2501->3000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue5"
+                    }, 
+                    "name": "MatchVideo6", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "3001->3500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue6"
+                    }, 
+                    "name": "MatchVideo7", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "3501->4000"
+                        }
+                    }
+                }
+            ]
+        }, 
+        "ingress::TOS1_Audio": {
+            "rules": [
+                {
+                    "action": {
+                        "type": "ingress::ToQueue0"
+                    }, 
+                    "name": "Match\u001fAudio0", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "0->500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue0"
+                    }, 
+                    "name": "Match\u001fAudio1", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "501->1000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue0"
+                    }, 
+                    "name": "Match\u001fAudio2", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "1001->1500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue1"
+                    }, 
+                    "name": "Match\u001fAudio3", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "1501->2000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue2"
+                    }, 
+                    "name": "Match\u001fAudio4", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "2001->2500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue3"
+                    }, 
+                    "name": "Match\u001fAudio5", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "2501->3000"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue4"
+                    }, 
+                    "name": "Match\u001fAudio6", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "3001->3500"
+                        }
+                    }
+                }, 
+                {
+                    "action": {
+                        "type": "ingress::ToQueue5"
+                    }, 
+                    "name": "Match\u001fAudio7", 
+                    "match": {
+                        "vlan.id": {
+                            "value": "3501->4000"
+                        }
+                    }
+                }
+            ]
+        }
+    }, 
+    "traffic_class": [
+        {
+            "count": 8, 
+            "traffic_class": 7, 
+            "port": "p0", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 6, 
+            "port": "p0", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 5, 
+            "port": "p0", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 4, 
+            "port": "p0", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 3, 
+            "port": "p0", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 2, 
+            "port": "p0", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 1, 
+            "port": "p0", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 0, 
+            "port": "p0", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 7, 
+            "port": "p7", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 6, 
+            "port": "p7", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 5, 
+            "port": "p7", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 4, 
+            "port": "p7", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 3, 
+            "port": "p7", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 2, 
+            "port": "p7", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 1, 
+            "port": "p7", 
+            "weight": 1
+        }, 
+        {
+            "count": 8, 
+            "traffic_class": 0, 
+            "port": "p7", 
+            "weight": 1
+        }
+    ]
+}
