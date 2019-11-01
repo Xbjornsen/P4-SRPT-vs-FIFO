@@ -1,5 +1,5 @@
 # P4-SRPT-vs-FIFO
-Create a p4 network and manage the flows based on priority alogorthim SRPT - Shortest Remaining processing time. The results from this will be compared to the results from flows based on the FIFO algorithm which is a basic p4 program. FIFO is First in First Out. 
+Create a p4 network and manage the flows based on priority alogorthim SRPT - Shortest Remaining Processing Time. 
 
 # Goal
 The goal of this project was to see if the algorithm SRPT has a better performance for certain types of data flows compared to FIFO. 
